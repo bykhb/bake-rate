@@ -1,20 +1,45 @@
 import { useState } from 'react'
 import './App.css'
+import { supabase } from './supabaseClient'
 
 function App() {
   const [rating, setRating] = useState(0)
   const [name, setName] = useState('')
   const [comment, setComment] = useState('')
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    console.log('Feedback submitted:', { rating, name, comment })
-    // TODO: Send to backend
-    alert('Thank you for your feedback!')
-    // Reset form
-    setRating(0)
-    setName('')
-    setComment('')
+    setIsSubmitting(true)
+
+    try {
+      const { data, error } = await supabase
+        .from('feedback')
+        .insert([
+          {
+            rating: rating,
+            name: name || null,
+            comment: comment || null
+          }
+        ])
+
+      if (error) {
+        console.error('Error saving feedback:', error)
+        alert('Sorry, there was an error saving your feedback. Please try again.')
+      } else {
+        console.log('Feedback saved successfully:', data)
+        alert('Thank you for your feedback!')
+        // Reset form
+        setRating(0)
+        setName('')
+        setComment('')
+      }
+    } catch (error) {
+      console.error('Unexpected error:', error)
+      alert('Sorry, there was an error. Please try again.')
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -80,8 +105,8 @@ function App() {
             </div>
 
             {/* Submit Button */}
-            <button type="submit" className="submit-btn" disabled={rating === 0}>
-              Submit Feedback
+            <button type="submit" className="submit-btn" disabled={rating === 0 || isSubmitting}>
+              {isSubmitting ? 'Submitting...' : 'Submit Feedback'}
             </button>
           </form>
         </section>
