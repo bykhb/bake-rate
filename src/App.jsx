@@ -6,10 +6,14 @@ function App() {
   const [rating, setRating] = useState(0)
   const [hoveredRating, setHoveredRating] = useState(0)
   const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [headline, setHeadline] = useState('')
   const [comment, setComment] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
-  const [progress, setProgress] = useState(0)
+  const [showModal, setShowModal] = useState(false)
+  const [reviews, setReviews] = useState([])
+  const [activeTab, setActiveTab] = useState('reviews')
 
   // Calculate progress based on filled fields
   useEffect(() => {
@@ -19,7 +23,29 @@ function App() {
     setProgress(currentProgress)
   }, [rating, comment])
 
-  const handleSubmit = async (e) => {
+  // Load reviews on component mount
+  useEffect(() => {
+    loadReviews()
+  }, [])
+
+  const loadReviews = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('feedback')
+        .select('*')
+        .order('created_at', { ascending: false })
+
+      if (error) {
+        console.error('Error loading reviews:', error)
+      } else {
+        setReviews(data || [])
+      }
+    } catch (error) {
+      console.error('Unexpected error loading reviews:', error)
+    }
+  }
+
+  const handleSubmitReview = async (e) => {
     e.preventDefault()
     setIsSubmitting(true)
 
@@ -30,25 +56,30 @@ function App() {
           {
             rating: rating,
             name: name || null,
+            email: email || null,
+            headline: headline || null,
             comment: comment || null
           }
         ])
 
       if (error) {
-        console.error('Error saving feedback:', error)
+        console.error('Error saving review:', error)
         alert(`Error: ${error.message}. Please check console for details.`)
       } else {
-        console.log('Feedback saved successfully:', data)
+        console.log('Review saved successfully:', data)
         setIsSubmitted(true)
-        // Reset form after 3 seconds
+        // Reset form and close modal
         setTimeout(() => {
           setRating(0)
           setHoveredRating(0)
           setName('')
+          setEmail('')
+          setHeadline('')
           setComment('')
           setIsSubmitted(false)
-          setProgress(0)
-        }, 3000)
+          setShowModal(false)
+          loadReviews() // Reload reviews
+        }, 2000)
       }
     } catch (error) {
       console.error('Unexpected error:', error)
@@ -56,6 +87,21 @@ function App() {
     } finally {
       setIsSubmitting(false)
     }
+  }
+
+  const openReviewModal = () => {
+    setShowModal(true)
+  }
+
+  const closeReviewModal = () => {
+    setShowModal(false)
+    // Reset form
+    setRating(0)
+    setHoveredRating(0)
+    setName('')
+    setEmail('')
+    setHeadline('')
+    setComment('')
   }
 
   const getRatingLabel = (stars) => {
@@ -144,6 +190,150 @@ function App() {
           </p>
         </div>
       </section>
+
+      {/* Reviews Section */}
+      <section className="reviews-section">
+        <div className="reviews-header">
+          <h2 className="reviews-title">REVIEWS</h2>
+          <div className="reviews-tabs">
+            <button 
+              className={`tab ${activeTab === 'reviews' ? 'active' : ''}`}
+              onClick={() => setActiveTab('reviews')}
+            >
+              Reviews
+            </button>
+            <button 
+              className={`tab ${activeTab === 'qa' ? 'active' : ''}`}
+              onClick={() => setActiveTab('qa')}
+            >
+              Q&A
+            </button>
+          </div>
+        </div>
+
+        {activeTab === 'reviews' && (
+          <div className="reviews-content">
+            {reviews.length === 0 ? (
+              <div className="no-reviews">
+                <div className="no-reviews-icon">⭐</div>
+                <h3 className="no-reviews-title">We're looking for stars!</h3>
+                <p className="no-reviews-subtitle">Let us know what you think</p>
+                <button className="write-review-btn" onClick={openReviewModal}>
+                  BE THE FIRST TO WRITE A REVIEW!
+                </button>
+              </div>
+            ) : (
+              <div className="reviews-list">
+                {/* Reviews will be displayed here */}
+                <p style={{color: 'white', textAlign: 'center'}}>
+                  {reviews.length} review(s) - Display component coming soon!
+                </p>
+                <button className="write-review-btn" onClick={openReviewModal} style={{margin: '0 auto', display: 'block'}}>
+                  WRITE A REVIEW
+                </button>
+              </div>
+            )}
+          </div>
+        )}
+      </section>
+
+      {/* Review Modal */}
+      {showModal && (
+        <div className="modal-overlay" onClick={closeReviewModal}>
+          <div className="modal" onClick={(e) => e.stopPropagation()}>
+            <button className="modal-close" onClick={closeReviewModal}>×</button>
+            <h2 className="modal-title">Share your thoughts</h2>
+            
+            <form className="modal-form" onSubmit={handleSubmitReview}>
+              {/* Rating */}
+              <div className="form-section">
+                <label className="form-label">
+                  Rate your experience <span className="required">*</span>
+                </label>
+                <div className="rating-input">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <button
+                      key={star}
+                      type="button"
+                      className={`rating-star ${star <= (hoveredRating || rating) ? 'filled' : ''}`}
+                      onClick={() => setRating(star)}
+                      onMouseEnter={() => setHoveredRating(star)}
+                      onMouseLeave={() => setHoveredRating(0)}
+                    >
+                      ⭐
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Review Text */}
+              <div className="form-section">
+                <label className="form-label">
+                  Write a review <span className="required">*</span>
+                </label>
+                <textarea
+                  className="form-textarea"
+                  value={comment}
+                  onChange={(e) => setComment(e.target.value)}
+                  placeholder="Tell us what you like or dislike"
+                  required
+                />
+              </div>
+
+              {/* Headline */}
+              <div className="form-section">
+                <label className="form-label">
+                  Add a headline <span className="required">*</span>
+                </label>
+                <input
+                  type="text"
+                  className="form-input"
+                  value={headline}
+                  onChange={(e) => setHeadline(e.target.value)}
+                  placeholder="Summarize your experience"
+                  required
+                />
+              </div>
+
+              {/* Name and Email */}
+              <div className="form-row">
+                <div className="form-section">
+                  <label className="form-label">
+                    Your name <span className="required">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    className="form-input"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    required
+                  />
+                </div>
+                <div className="form-section">
+                  <label className="form-label">
+                    Your email address <span className="required">*</span>
+                  </label>
+                  <input
+                    type="email"
+                    className="form-input"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                  />
+                </div>
+              </div>
+
+              <button 
+                type="submit" 
+                className="submit-review-btn"
+                disabled={rating === 0 || !comment || !headline || !name || !email || isSubmitting}
+              >
+                {isSubmitting ? 'Submitting...' : 'Send'}
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
