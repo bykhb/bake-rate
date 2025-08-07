@@ -669,7 +669,7 @@ main {
 /* Dark mode support */
 @media (prefers-color-scheme: dark) {
   body {
-    background: linear-gradient(135deg, #92400e 0%, #b45309 50%, #d97706 100%);
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
   }
   
   .ingredients-card,
