@@ -1,155 +1,207 @@
-/* Modern Cookie Feedback App - Complete Redesign */
+/* Premium Cookies bykhb - Dark Sophisticated Theme */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap');
+
 * {
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 body {
   margin: 0;
   padding: 0;
-  background: linear-gradient(135deg, #fef3c7 0%, #f59e0b 50%, #d97706 100%);
+  background: #0a0a0a;
   min-height: 100vh;
-  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  color: #ffffff;
+  line-height: 1.6;
 }
 
 .app {
-  max-width: 720px;
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 2rem 1rem;
+  padding: 0;
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
+}
+
+/* Elegant Header */
+header {
+  text-align: center;
+  padding: 4rem 2rem 3rem;
+  background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.brand-logo {
+  font-family: 'Playfair Display', serif;
+  font-size: 4rem;
+  font-weight: 700;
+  font-style: italic;
+  color: #ffffff;
+  margin: 0 0 1rem 0;
+  letter-spacing: -1px;
+  text-shadow: 0 2px 20px rgba(0,0,0,0.5);
+}
+
+.brand-subtitle {
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  font-weight: 300;
+  color: rgba(255,255,255,0.7);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+/* Premium Cookie Showcase */
+.cookie-showcase {
+  padding: 4rem 2rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  max-width: 1000px;
+  margin: 0 auto;
   align-items: center;
 }
 
-/* Header with Progress */
-header {
-  text-align: center;
-  margin-bottom: 3rem;
-  animation: fadeInDown 0.8s ease-out;
+.cookie-images {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.main-cookie-image {
   width: 100%;
+  height: 400px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
 }
 
-header h1 {
-  color: #1e293b;
-  font-size: 3.5rem;
-  font-weight: 700;
-  margin: 0 0 0.5rem 0;
-  letter-spacing: -2px;
-  background: linear-gradient(135deg, #1e293b 0%, #475569 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+.main-cookie-image:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.3);
 }
 
-.subtitle {
-  color: #64748b;
-  font-size: 1.2rem;
-  font-weight: 500;
-  margin: 0 0 1.5rem 0;
-  opacity: 0;
-  animation: fadeInUp 0.8s ease-out 0.3s both;
+.image-placeholder {
+  text-align: center;
+  color: rgba(255,255,255,0.6);
 }
 
-/* Progress Indicator */
-.progress-container {
-  margin-top: 1rem;
+.image-placeholder-icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+  opacity: 0.5;
+}
+
+.image-placeholder-text {
+  font-size: 1.1rem;
+  font-weight: 300;
+}
+
+.thumbnail-row {
+  display: flex;
+  gap: 1rem;
+}
+
+.thumbnail {
+  width: 80px;
+  height: 80px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.thumbnail:hover {
+  border-color: rgba(255,255,255,0.3);
+  background: rgba(255,255,255,0.08);
+}
+
+.thumbnail-icon {
+  font-size: 1.5rem;
+  opacity: 0.4;
+}
+
+/* Cookie Information */
+.cookie-info {
+  padding: 0 2rem;
+}
+
+.cookie-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 3rem;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0 0 1rem 0;
+  letter-spacing: -1px;
+}
+
+.cookie-rating {
   display: flex;
   align-items: center;
   gap: 1rem;
-  justify-content: center;
+  margin-bottom: 2rem;
 }
 
-.progress-bar {
-  width: 200px;
-  height: 8px;
-  background: #e5e7eb;
-  border-radius: 10px;
-  overflow: hidden;
-  position: relative;
+.stars-display {
+  display: flex;
+  gap: 0.25rem;
 }
 
-.progress-fill {
-  height: 100%;
-  background: linear-gradient(90deg, #3b82f6, #06b6d4);
-  border-radius: 10px;
-  transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
+.star-display {
+  color: #fbbf24;
+  font-size: 1.5rem;
 }
 
-.progress-fill::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-  animation: shimmer 2s infinite;
+.rating-count {
+  color: rgba(255,255,255,0.7);
+  font-size: 0.9rem;
+  text-decoration: underline;
+  cursor: pointer;
 }
 
-.progress-text {
-  font-size: 0.875rem;
+.cookie-price {
+  margin-bottom: 2rem;
+}
+
+.price-current {
+  font-size: 2rem;
   font-weight: 600;
-  color: #64748b;
+  color: #ffffff;
 }
 
-@keyframes shimmer {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(100%); }
-}
-
-/* Cookie Showcase Section */
-.cookie-showcase {
-  width: 100%;
-  margin-bottom: 2rem;
-  animation: fadeInUp 0.8s ease-out 0.1s both;
-}
-
-.cookie-photo {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 2rem;
-}
-
-.cookie-placeholder {
-  width: 300px;
-  height: 300px;
-  background: linear-gradient(145deg, #fff7ed 0%, #fed7aa 100%);
-  border-radius: 50%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-  border: 4px solid #f59e0b;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.cookie-placeholder:hover {
-  transform: rotate(5deg) scale(1.05);
-  box-shadow: 0 15px 40px rgba(245, 158, 11, 0.2);
-}
-
-.cookie-emoji {
-  font-size: 6rem;
-  margin-bottom: 1rem;
-  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
-}
-
-.cookie-placeholder p {
+.price-original {
   font-size: 1.2rem;
-  font-weight: 600;
-  color: #92400e;
-  margin: 0;
-  text-align: center;
+  color: rgba(255,255,255,0.5);
+  text-decoration: line-through;
+  margin-left: 1rem;
 }
 
-/* Main Content */
-main {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
+.cookie-description {
+  color: rgba(255,255,255,0.8);
+  font-size: 1.1rem;
+  line-height: 1.7;
+  margin-bottom: 2rem;
+  font-weight: 300;
+}
+
+.cookie-details {
+  color: rgba(255,255,255,0.7);
+  font-style: italic;
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-bottom: 3rem;
 }
 
 /* Card Styles */
@@ -578,61 +630,42 @@ main {
 
 /* Mobile Responsive */
 @media (max-width: 768px) {
-  .app {
-    padding: 1rem 0.5rem;
-  }
-  
   header {
-    margin-bottom: 2rem;
+    padding: 3rem 1rem 2rem;
   }
   
-  header h1 {
+  .brand-logo {
     font-size: 2.5rem;
   }
   
-  .cookie-placeholder {
-    width: 250px;
-    height: 250px;
+  .brand-subtitle {
+    font-size: 0.9rem;
   }
   
-  .cookie-emoji {
-    font-size: 4rem;
+  .cookie-showcase {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    padding: 2rem 1rem;
   }
   
-  .ingredients-card,
-  .feedback-section {
-    padding: 1.5rem;
-    border-radius: 20px;
+  .main-cookie-image {
+    height: 300px;
   }
   
-  .ingredients-card h2,
-  .feedback-section h2 {
+  .cookie-title {
+    font-size: 2rem;
+  }
+  
+  .cookie-info {
+    padding: 0 1rem;
+  }
+  
+  .price-current {
     font-size: 1.5rem;
   }
   
-  .stars {
-    gap: 0.5rem;
-    flex-wrap: wrap;
-  }
-  
-  .star {
-    font-size: 3rem;
-    padding: 0.5rem;
-  }
-  
-  .form-group input,
-  .form-group textarea {
-    padding: 0.75rem 1rem;
-    font-size: 16px; /* Prevents zoom on iOS */
-  }
-  
-  .submit-btn {
-    padding: 1rem 1.5rem;
+  .price-original {
     font-size: 1rem;
-  }
-  
-  .progress-bar {
-    width: 150px;
   }
 }
 

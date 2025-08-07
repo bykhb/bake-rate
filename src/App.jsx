@@ -88,113 +88,62 @@ function App() {
 
   return (
     <div className="app">
+      {/* Elegant Header */}
       <header>
-        <h1>🍪 Rate My Cookie!</h1>
-        <p className="subtitle">Thanks for joining me for lunch! 💝</p>
-        {progress > 0 && (
-          <div className="progress-container">
-            <div className="progress-bar">
-              <div 
-                className="progress-fill" 
-                style={{ width: `${progress}%` }}
-              ></div>
-            </div>
-            <span className="progress-text">{progress}% Complete</span>
-          </div>
-        )}
+        <h1 className="brand-logo">Cookies bykhb</h1>
+        <p className="brand-subtitle">Artisan Homemade Cookies</p>
       </header>
 
-      <main>
-        {/* Cookie Photo Section */}
-        <section className="cookie-showcase">
-          <div className="cookie-photo">
-            <div className="cookie-placeholder">
-              <span className="cookie-emoji">🍪</span>
-              <p>Fresh Chocolate Chip Cookie</p>
+      {/* Premium Cookie Showcase */}
+      <section className="cookie-showcase">
+        <div className="cookie-images">
+          <div className="main-cookie-image">
+            <div className="image-placeholder">
+              <div className="image-placeholder-icon">📸</div>
+              <div className="image-placeholder-text">Cookie photo will appear here</div>
             </div>
           </div>
-        </section>
-
-        {/* Ingredients Section */}
-        <section className="ingredients-card">
-          <h2>Today's Homemade Cookie</h2>
-          <div className="ingredient-list">
-            <p><strong>Made with love:</strong> Premium flour, fresh butter, brown sugar, Belgian chocolate chips, farm eggs, pure vanilla extract, baking soda, sea salt</p>
-            <p><strong>Baked fresh:</strong> {new Date().toLocaleDateString()}</p>
-            <p><strong>Best enjoyed:</strong> Within 7 days (but probably gone sooner! 😄)</p>
+          <div className="thumbnail-row">
+            <div className="thumbnail">
+              <div className="thumbnail-icon">📷</div>
+            </div>
+            <div className="thumbnail">
+              <div className="thumbnail-icon">📷</div>
+            </div>
+            <div className="thumbnail">
+              <div className="thumbnail-icon">📷</div>
+            </div>
           </div>
-        </section>
+        </div>
 
-        {/* Feedback Form */}
-        <section className="feedback-section">
-          <h2>How was it?</h2>
-          <form onSubmit={handleSubmit}>
-            {/* Enhanced Star Rating */}
-            <div className="rating-section">
-              <label>Your Rating</label>
-              <div className="stars-container">
-                <div className="stars">
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <button
-                      key={star}
-                      type="button"
-                      className={`star ${star <= (hoveredRating || rating) ? 'filled' : ''}`}
-                      onClick={() => setRating(star)}
-                      onMouseEnter={() => setHoveredRating(star)}
-                      onMouseLeave={() => setHoveredRating(0)}
-                      aria-label={`Rate ${star} stars`}
-                    >
-                      ⭐
-                    </button>
-                  ))}
-                </div>
-                <div className="rating-label">
-                  {getRatingLabel(hoveredRating || rating)}
-                </div>
-              </div>
+        <div className="cookie-info">
+          <h2 className="cookie-title">CHOCOLATE CHIP SUPREME</h2>
+          
+          <div className="cookie-rating">
+            <div className="stars-display">
+              {[1, 2, 3, 4, 5].map((star) => (
+                <span key={star} className="star-display">⭐</span>
+              ))}
             </div>
+            <span className="rating-count">(6 reviews)</span>
+          </div>
 
-            {/* Name Input */}
-            <div className="form-group">
-              <label htmlFor="name">Name (optional)</label>
-              <input
-                type="text"
-                id="name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="Your name"
-              />
-            </div>
+          <div className="cookie-price">
+            <span className="price-current">$8.00</span>
+            <span className="price-original">$10.00</span>
+          </div>
 
-            {/* Comment */}
-            <div className="form-group">
-              <label htmlFor="comment">Tell us more</label>
-              <textarea
-                id="comment"
-                value={comment}
-                onChange={(e) => setComment(e.target.value)}
-                placeholder="What did you think about the taste, texture, sweetness...?"
-                rows="4"
-              />
-              <div className="char-count">
-                {comment.length}/500 characters
-              </div>
-            </div>
+          <p className="cookie-description">
+            She's nutty, she's rich, and she's not here to play it safe. 
+            A bold bite for those who know their worth (and their cookie preference).
+          </p>
 
-            {/* Submit Button */}
-            <button type="submit" className="submit-btn" disabled={rating === 0 || isSubmitting}>
-              {isSubmitting ? (
-                <>
-                  <span className="spinner"></span>
-                  Submitting...
-                </>
-              ) : (
-                'Submit Feedback'
-              )}
-            </button>
-          </form>
-        </section>
-      </main>
+          <p className="cookie-details">
+            Premium flour base with Belgian dark chocolate chips, Madagascar vanilla extract, 
+            and brown butter from grass-fed cows. Baked fresh this morning with extra love.
+          </p>
+        </div>
+      </section>
     </div>
   )
 }
