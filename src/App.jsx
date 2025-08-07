@@ -15,14 +15,6 @@ function App() {
   const [reviews, setReviews] = useState([])
   const [activeTab, setActiveTab] = useState('reviews')
 
-  // Calculate progress based on filled fields
-  useEffect(() => {
-    let currentProgress = 0
-    if (rating > 0) currentProgress += 60 // Rating is most important
-    if (comment.trim()) currentProgress += 40 // Comment adds value
-    setProgress(currentProgress)
-  }, [rating, comment])
-
   // Load reviews on component mount
   useEffect(() => {
     loadReviews()
