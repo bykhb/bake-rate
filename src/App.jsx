@@ -74,8 +74,8 @@ function App() {
       <div className="app">
         <div className="success-animation">
           <div className="success-checkmark">✓</div>
-          <h2>Thank You!</h2>
-          <p>Your feedback helps us make better cookies! 🍪</p>
+          <h2>Thank You So Much!</h2>
+          <p>Your feedback means the world to me! It helps me bake even better treats for our future lunches 🍪❤️</p>
           <div className="loading-dots">
             <span></span>
             <span></span>
@@ -90,6 +90,7 @@ function App() {
     <div className="app">
       <header>
         <h1>🍪 Rate My Cookie!</h1>
+        <p className="subtitle">Thanks for joining me for lunch! 💝</p>
         {progress > 0 && (
           <div className="progress-container">
             <div className="progress-bar">
@@ -116,11 +117,11 @@ function App() {
 
         {/* Ingredients Section */}
         <section className="ingredients-card">
-          <h2>Today's Cookie</h2>
+          <h2>Today's Homemade Cookie</h2>
           <div className="ingredient-list">
-            <p><strong>Ingredients:</strong> Flour, Butter, Brown Sugar, Chocolate Chips, Eggs, Vanilla Extract, Baking Soda, Salt</p>
-            <p><strong>Manufactured:</strong> {new Date().toLocaleDateString()}</p>
-            <p><strong>Best By:</strong> {new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toLocaleDateString()}</p>
+            <p><strong>Made with love:</strong> Premium flour, fresh butter, brown sugar, Belgian chocolate chips, farm eggs, pure vanilla extract, baking soda, sea salt</p>
+            <p><strong>Baked fresh:</strong> {new Date().toLocaleDateString()}</p>
+            <p><strong>Best enjoyed:</strong> Within 7 days (but probably gone sooner! 😄)</p>
           </div>
         </section>
 
