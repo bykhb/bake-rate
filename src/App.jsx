@@ -119,9 +119,10 @@ function App() {
 
   const closeReviewModal = () => {
     setShowModal(false)
-    // Reset form
+    // Reset all form states
     setRating(0)
     setHoveredRating(0)
+    setIsDragging(false)
     setName('')
     setEmail('')
     setHeadline('')
@@ -141,8 +142,9 @@ function App() {
     
     if (element && element.classList.contains('rating-star')) {
       const starValue = parseInt(element.dataset.star)
-      if (starValue && starValue !== rating) {
+      if (starValue) {
         setHoveredRating(starValue)
+        // Update rating immediately during drag
         setRating(starValue)
       }
     }
@@ -154,8 +156,10 @@ function App() {
   }
 
   const handleStarClick = (starValue) => {
+    // Force update both states immediately
     setRating(starValue)
-    setHoveredRating(0) // Clear any hover state
+    setHoveredRating(0)
+    setIsDragging(false) // Ensure dragging state is cleared
   }
 
   const getRatingLabel = (stars) => {
@@ -366,8 +370,16 @@ function App() {
                       className={`rating-star ${(hoveredRating > 0 && star <= hoveredRating) || (hoveredRating === 0 && star <= rating) ? 'filled' : ''}`}
                       data-star={star}
                       onClick={() => handleStarClick(star)}
-                      onMouseEnter={() => !isDragging && setHoveredRating(star)}
-                      onMouseLeave={() => !isDragging && setHoveredRating(0)}
+                      onMouseEnter={() => {
+                        if (!isDragging) {
+                          setHoveredRating(star)
+                        }
+                      }}
+                      onMouseLeave={() => {
+                        if (!isDragging) {
+                          setHoveredRating(0)
+                        }
+                      }}
                       onTouchStart={handleTouchStart}
                       onTouchMove={handleTouchMove}
                       onTouchEnd={handleTouchEnd}
