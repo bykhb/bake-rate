@@ -32,30 +32,6 @@ function App() {
     localStorage.setItem('preferredLanguage', newLanguage)
   }
 
-  // Temporary admin function to clear all reviews
-  const clearAllReviews = async () => {
-    const confirmed = window.confirm('Are you sure you want to delete ALL reviews? This cannot be undone.')
-    if (!confirmed) return
-
-    try {
-      const { error } = await supabase
-        .from('feedback')
-        .delete()
-        .neq('id', 0) // Delete all rows
-
-      if (error) {
-        console.error('Error deleting reviews:', error)
-        alert('Error deleting reviews. Check console.')
-      } else {
-        alert('All reviews have been deleted successfully!')
-        loadReviews() // Refresh the reviews list
-        setReviewsPage(1)
-      }
-    } catch (error) {
-      console.error('Unexpected error:', error)
-      alert('Sorry, there was an error deleting reviews.')
-    }
-  }
 
   // Load reviews on component mount
   useEffect(() => {
@@ -339,22 +315,6 @@ function App() {
               <div className="reviews-list">
                 <div className="reviews-count">
                   {reviews.length} {reviews.length === 1 ? t.reviewCount : t.reviewCountPlural}
-                  {/* Temporary admin button - remove after use */}
-                  <button 
-                    onClick={clearAllReviews}
-                    style={{
-                      marginLeft: '1rem',
-                      padding: '0.25rem 0.5rem',
-                      fontSize: '0.8rem',
-                      background: '#dc3545',
-                      color: 'white',
-                      border: 'none',
-                      borderRadius: '4px',
-                      cursor: 'pointer'
-                    }}
-                  >
-                    🗑️ Clear All
-                  </button>
                 </div>
                 
                 {reviews.map((review) => (
