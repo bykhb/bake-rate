@@ -14,23 +14,43 @@ function App() {
   const [showModal, setShowModal] = useState(false)
   const [reviews, setReviews] = useState([])
   const [activeTab, setActiveTab] = useState('reviews')
+  const [reviewsPage, setReviewsPage] = useState(1)
+  const [hasMoreReviews, setHasMoreReviews] = useState(true)
+  const [loadingMore, setLoadingMore] = useState(false)
+  
+  const REVIEWS_PER_PAGE = 5
 
   // Load reviews on component mount
   useEffect(() => {
     loadReviews()
   }, [])
 
-  const loadReviews = async () => {
+  const loadReviews = async (page = 1, append = false) => {
     try {
-      const { data, error } = await supabase
+      const from = (page - 1) * REVIEWS_PER_PAGE
+      const to = from + REVIEWS_PER_PAGE - 1
+
+      const { data, error, count } = await supabase
         .from('feedback')
-        .select('*')
+        .select('*', { count: 'exact' })
         .order('created_at', { ascending: false })
+        .range(from, to)
 
       if (error) {
         console.error('Error loading reviews:', error)
       } else {
-        setReviews(data || [])
+        const newReviews = data || []
+        
+        if (append) {
+          setReviews(prev => [...prev, ...newReviews])
+        } else {
+          setReviews(newReviews)
+        }
+
+        // Check if there are more reviews
+        const totalReviews = count || 0
+        const loadedSoFar = append ? reviews.length + newReviews.length : newReviews.length
+        setHasMoreReviews(loadedSoFar < totalReviews)
       }
     } catch (error) {
       console.error('Unexpected error loading reviews:', error)
@@ -70,7 +90,8 @@ function App() {
           setComment('')
           setIsSubmitted(false)
           setShowModal(false)
-          loadReviews() // Reload reviews
+          loadReviews() // Reload reviews from beginning
+          setReviewsPage(1) // Reset pagination
         }, 2000)
       }
     } catch (error) {
@@ -79,6 +100,16 @@ function App() {
     } finally {
       setIsSubmitting(false)
     }
+  }
+
+  const loadMoreReviews = async () => {
+    if (loadingMore || !hasMoreReviews) return
+    
+    setLoadingMore(true)
+    const nextPage = reviewsPage + 1
+    await loadReviews(nextPage, true)
+    setReviewsPage(nextPage)
+    setLoadingMore(false)
   }
 
   const openReviewModal = () => {
@@ -254,6 +285,23 @@ function App() {
                     )}
                   </div>
                 ))}
+                
+                {hasMoreReviews && (
+                  <button 
+                    className="load-more-btn"
+                    onClick={loadMoreReviews}
+                    disabled={loadingMore}
+                  >
+                    {loadingMore ? (
+                      <>
+                        <span className="load-more-spinner"></span>
+                        Loading...
+                      </>
+                    ) : (
+                      'Load More Reviews'
+                    )}
+                  </button>
+                )}
                 
                 <div className="reviews-header-with-button">
                   <button className="write-review-btn" onClick={openReviewModal}>
