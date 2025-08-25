@@ -394,6 +394,8 @@ header {
   border-radius: 4px;
   line-height: 1;
   user-select: none;
+  touch-action: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .rating-star.filled {

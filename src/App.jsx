@@ -17,6 +17,7 @@ function App() {
   const [reviewsPage, setReviewsPage] = useState(1)
   const [hasMoreReviews, setHasMoreReviews] = useState(true)
   const [loadingMore, setLoadingMore] = useState(false)
+  const [isDragging, setIsDragging] = useState(false)
   
   const REVIEWS_PER_PAGE = 5
 
@@ -125,6 +126,31 @@ function App() {
     setEmail('')
     setHeadline('')
     setComment('')
+  }
+
+  // Mobile touch functions for star rating
+  const handleTouchStart = () => {
+    setIsDragging(true)
+  }
+
+  const handleTouchMove = (e) => {
+    if (!isDragging) return
+    
+    const touch = e.touches[0]
+    const element = document.elementFromPoint(touch.clientX, touch.clientY)
+    
+    if (element && element.classList.contains('rating-star')) {
+      const starValue = parseInt(element.dataset.star)
+      if (starValue) {
+        setHoveredRating(starValue)
+        setRating(starValue)
+      }
+    }
+  }
+
+  const handleTouchEnd = () => {
+    setIsDragging(false)
+    setHoveredRating(0)
   }
 
   const getRatingLabel = (stars) => {
@@ -333,11 +359,13 @@ function App() {
                       key={star}
                       type="button"
                       className={`rating-star ${(hoveredRating > 0 && star <= hoveredRating) || (hoveredRating === 0 && star <= rating) ? 'filled' : ''}`}
+                      data-star={star}
                       onClick={() => setRating(star)}
                       onMouseEnter={() => setHoveredRating(star)}
                       onMouseLeave={() => setHoveredRating(0)}
-                      onMouseDown={() => setRating(star)}
-                      onMouseOver={() => setHoveredRating(star)}
+                      onTouchStart={handleTouchStart}
+                      onTouchMove={handleTouchMove}
+                      onTouchEnd={handleTouchEnd}
                     >
                       ★
                     </button>
