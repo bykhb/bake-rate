@@ -216,13 +216,50 @@ function App() {
               </div>
             ) : (
               <div className="reviews-list">
-                {/* Reviews will be displayed here */}
-                <p style={{color: 'white', textAlign: 'center'}}>
-                  {reviews.length} review(s) - Display component coming soon!
-                </p>
-                <button className="write-review-btn" onClick={openReviewModal} style={{margin: '0 auto', display: 'block'}}>
-                  WRITE A REVIEW
-                </button>
+                <div className="reviews-count">
+                  {reviews.length} review{reviews.length === 1 ? '' : 's'}
+                </div>
+                
+                {reviews.map((review) => (
+                  <div key={review.id} className="review-item">
+                    <div className="review-rating">
+                      {[1, 2, 3, 4, 5].map((star) => (
+                        <span 
+                          key={star} 
+                          className="review-star"
+                          style={{
+                            opacity: star <= review.rating ? 1 : 0.3
+                          }}
+                        >
+                          ⭐
+                        </span>
+                      ))}
+                    </div>
+                    
+                    {review.headline && (
+                      <h3 className="review-headline">{review.headline}</h3>
+                    )}
+                    
+                    <div className="review-meta">
+                      {review.name && (
+                        <span className="review-author">By {review.name}</span>
+                      )}
+                      <span className="review-date">
+                        {new Date(review.created_at).toLocaleDateString()}
+                      </span>
+                    </div>
+                    
+                    {review.comment && (
+                      <p className="review-text">{review.comment}</p>
+                    )}
+                  </div>
+                ))}
+                
+                <div className="reviews-header-with-button">
+                  <button className="write-review-btn" onClick={openReviewModal}>
+                    WRITE A REVIEW
+                  </button>
+                </div>
               </div>
             )}
           </div>
