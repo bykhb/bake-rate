@@ -332,12 +332,12 @@ function App() {
                     <button
                       key={star}
                       type="button"
-                      className={`rating-star ${star <= (hoveredRating || rating) ? 'filled' : ''}`}
+                      className={`rating-star ${(hoveredRating > 0 && star <= hoveredRating) || (hoveredRating === 0 && star <= rating) ? 'filled' : ''}`}
                       onClick={() => setRating(star)}
                       onMouseEnter={() => setHoveredRating(star)}
                       onMouseLeave={() => setHoveredRating(0)}
                     >
-                      ⭐
+                      ★
                     </button>
                   ))}
                 </div>

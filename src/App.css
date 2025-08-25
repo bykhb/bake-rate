@@ -386,13 +386,13 @@ header {
   border: none;
   font-size: 2rem;
   cursor: pointer;
-  color: #e5e5e5;
+  color: #d1d5db;
   transition: all 0.2s ease;
   padding: 0.25rem;
 }
 
 .rating-star.filled {
-  color: #fbbf24;
+  color: #fbbf24 !important;
 }
 
 .rating-star:hover {
