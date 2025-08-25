@@ -135,7 +135,6 @@ function App() {
 
   const handleTouchMove = (e) => {
     if (!isDragging) return
-    e.preventDefault() // Prevent scrolling
     
     const touch = e.touches[0]
     const element = document.elementFromPoint(touch.clientX, touch.clientY)
