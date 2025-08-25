@@ -386,7 +386,7 @@ header {
   border: none;
   font-size: 2rem;
   cursor: pointer;
-  color: #ddd;
+  color: #e5e5e5;
   transition: all 0.2s ease;
   padding: 0.25rem;
 }

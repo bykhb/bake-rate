@@ -372,38 +372,24 @@ function App() {
                 />
               </div>
 
-              {/* Name and Email */}
-              <div className="form-row">
-                <div className="form-section">
-                  <label className="form-label">
-                    Your name <span className="required">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    className="form-input"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    required
-                  />
-                </div>
-                <div className="form-section">
-                  <label className="form-label">
-                    Your email address <span className="required">*</span>
-                  </label>
-                  <input
-                    type="email"
-                    className="form-input"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                  />
-                </div>
+              {/* Name */}
+              <div className="form-section">
+                <label className="form-label">
+                  Your name <span className="required">*</span>
+                </label>
+                <input
+                  type="text"
+                  className="form-input"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  required
+                />
               </div>
 
               <button 
                 type="submit" 
                 className="submit-review-btn"
-                disabled={rating === 0 || !comment || !headline || !name || !email || isSubmitting}
+                disabled={rating === 0 || !comment || !headline || !name || isSubmitting}
               >
                 {isSubmitting ? 'Submitting...' : 'Send'}
               </button>
