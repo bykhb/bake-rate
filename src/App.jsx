@@ -33,9 +33,15 @@ function App() {
   }
 
 
-  // Load reviews on component mount
+  // Load reviews on component mount and set page title
   useEffect(() => {
     loadReviews()
+    
+    // Set environment-specific page title
+    const environment = import.meta.env.VITE_ENVIRONMENT
+    const isDev = environment !== 'production'
+    const titleSuffix = isDev ? ' - DEV' : ''
+    document.title = `🍪 Rate My Cookie!${titleSuffix}`
   }, [])
 
   const loadReviews = async (page = 1, append = false) => {
