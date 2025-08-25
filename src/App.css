@@ -396,6 +396,12 @@ header {
   user-select: none;
   touch-action: none;
   -webkit-tap-highlight-color: transparent;
+  outline: none;
+}
+
+.rating-star:focus {
+  outline: none;
+  box-shadow: none;
 }
 
 .rating-star.filled {

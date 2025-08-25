@@ -135,13 +135,14 @@ function App() {
 
   const handleTouchMove = (e) => {
     if (!isDragging) return
+    e.preventDefault() // Prevent scrolling
     
     const touch = e.touches[0]
     const element = document.elementFromPoint(touch.clientX, touch.clientY)
     
     if (element && element.classList.contains('rating-star')) {
       const starValue = parseInt(element.dataset.star)
-      if (starValue) {
+      if (starValue && starValue !== rating) {
         setHoveredRating(starValue)
         setRating(starValue)
       }
@@ -151,6 +152,11 @@ function App() {
   const handleTouchEnd = () => {
     setIsDragging(false)
     setHoveredRating(0)
+  }
+
+  const handleStarClick = (starValue) => {
+    setRating(starValue)
+    setHoveredRating(0) // Clear any hover state
   }
 
   const getRatingLabel = (stars) => {
@@ -360,9 +366,9 @@ function App() {
                       type="button"
                       className={`rating-star ${(hoveredRating > 0 && star <= hoveredRating) || (hoveredRating === 0 && star <= rating) ? 'filled' : ''}`}
                       data-star={star}
-                      onClick={() => setRating(star)}
-                      onMouseEnter={() => setHoveredRating(star)}
-                      onMouseLeave={() => setHoveredRating(0)}
+                      onClick={() => handleStarClick(star)}
+                      onMouseEnter={() => !isDragging && setHoveredRating(star)}
+                      onMouseLeave={() => !isDragging && setHoveredRating(0)}
                       onTouchStart={handleTouchStart}
                       onTouchMove={handleTouchMove}
                       onTouchEnd={handleTouchEnd}
