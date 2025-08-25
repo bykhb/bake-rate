@@ -144,8 +144,11 @@ function App() {
       const starValue = parseInt(element.dataset.star)
       if (starValue) {
         setHoveredRating(starValue)
-        // Update rating immediately during drag
         setRating(starValue)
+        // Update focus to the dragged star and blur others
+        const allStars = document.querySelectorAll('.rating-star')
+        allStars.forEach(star => star.blur())
+        element.focus()
       }
     }
   }
