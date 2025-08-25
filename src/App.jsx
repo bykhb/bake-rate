@@ -336,11 +336,28 @@ function App() {
                       onClick={() => setRating(star)}
                       onMouseEnter={() => setHoveredRating(star)}
                       onMouseLeave={() => setHoveredRating(0)}
+                      onMouseDown={() => setRating(star)}
+                      onMouseOver={() => setHoveredRating(star)}
                     >
                       ★
                     </button>
                   ))}
                 </div>
+              </div>
+
+              {/* Title */}
+              <div className="form-section">
+                <label className="form-label">
+                  Write a title <span className="required">*</span>
+                </label>
+                <input
+                  type="text"
+                  className="form-input"
+                  value={headline}
+                  onChange={(e) => setHeadline(e.target.value)}
+                  placeholder="Summarize your experience"
+                  required
+                />
               </div>
 
               {/* Review Text */}
@@ -353,21 +370,6 @@ function App() {
                   value={comment}
                   onChange={(e) => setComment(e.target.value)}
                   placeholder="Tell us what you like or dislike"
-                  required
-                />
-              </div>
-
-              {/* Headline */}
-              <div className="form-section">
-                <label className="form-label">
-                  Add a headline <span className="required">*</span>
-                </label>
-                <input
-                  type="text"
-                  className="form-input"
-                  value={headline}
-                  onChange={(e) => setHeadline(e.target.value)}
-                  placeholder="Summarize your experience"
                   required
                 />
               </div>
