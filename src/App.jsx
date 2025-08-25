@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import './App.css'
 import { supabase } from './supabaseClient'
+import { translations } from './translations'
 
 function App() {
   const [rating, setRating] = useState(0)
@@ -18,8 +19,18 @@ function App() {
   const [hasMoreReviews, setHasMoreReviews] = useState(true)
   const [loadingMore, setLoadingMore] = useState(false)
   const [isDragging, setIsDragging] = useState(false)
+  const [currentLanguage, setCurrentLanguage] = useState(() => {
+    return localStorage.getItem('preferredLanguage') || 'en'
+  })
   
   const REVIEWS_PER_PAGE = 5
+  const t = translations[currentLanguage]
+
+  const toggleLanguage = () => {
+    const newLanguage = currentLanguage === 'en' ? 'ko' : 'en'
+    setCurrentLanguage(newLanguage)
+    localStorage.setItem('preferredLanguage', newLanguage)
+  }
 
   // Load reviews on component mount
   useEffect(() => {
@@ -167,13 +178,13 @@ function App() {
 
   const getRatingLabel = (stars) => {
     const labels = {
-      1: "Poor - Needs improvement",
-      2: "Fair - Below expectations", 
-      3: "Good - Meets expectations",
-      4: "Very Good - Exceeds expectations",
-      5: "Excellent - Outstanding!"
+      1: t.ratingPoor,
+      2: t.ratingFair,
+      3: t.ratingGood,
+      4: t.ratingVeryGood,
+      5: t.ratingExcellent
     }
-    return labels[stars] || "Click to rate"
+    return labels[stars] || t.clickToRate
   }
 
   if (isSubmitted) {
@@ -181,8 +192,8 @@ function App() {
       <div className="app">
         <div className="success-animation">
           <div className="success-checkmark">✓</div>
-          <h2>Thank You So Much!</h2>
-          <p>Your feedback means the world to me! It helps me bake even better treats for our future lunches 🍪❤️</p>
+          <h2>{t.thankYou || 'Thank You So Much!'}</h2>
+          <p>{t.feedbackMessage || 'Your feedback means the world to me! It helps me bake even better treats for our future lunches 🍪❤️'}</p>
           <div className="loading-dots">
             <span></span>
             <span></span>
@@ -197,8 +208,26 @@ function App() {
     <div className="app">
       {/* Elegant Header */}
       <header>
-        <h1 className="brand-logo">Cookies bykhb</h1>
-        <p className="brand-subtitle">Artisan Homemade Cookies</p>
+        <div className="header-content">
+          <div className="brand-info">
+            <h1 className="brand-logo">{t.brandTitle}</h1>
+            <p className="brand-subtitle">{t.brandSubtitle}</p>
+          </div>
+          <div className="language-switcher" onClick={toggleLanguage}>
+            <button 
+              className={`lang-option ${currentLanguage === 'en' ? 'active' : ''}`}
+              aria-label="Switch to English"
+            >
+              🇺🇸 EN
+            </button>
+            <button 
+              className={`lang-option ${currentLanguage === 'ko' ? 'active' : ''}`}
+              aria-label="Switch to Korean"
+            >
+              🇰🇷 KO
+            </button>
+          </div>
+        </div>
       </header>
 
       {/* Premium Cookie Showcase */}
@@ -224,7 +253,7 @@ function App() {
         </div>
 
         <div className="cookie-info">
-          <h2 className="cookie-title">CHOCOLATE CHIP SUPREME</h2>
+          <h2 className="cookie-title">{t.cookieTitle}</h2>
           
           <div className="cookie-rating">
             <div className="stars-display">
@@ -232,7 +261,7 @@ function App() {
                 <span key={star} className="star-display">⭐</span>
               ))}
             </div>
-            <span className="rating-count">(6 reviews)</span>
+            <span className="rating-count">(6 {t.reviewCountPlural})</span>
           </div>
 
           <div className="cookie-price">
@@ -241,13 +270,11 @@ function App() {
           </div>
 
           <p className="cookie-description">
-            She's nutty, she's rich, and she's not here to play it safe. 
-            A bold bite for those who know their worth (and their cookie preference).
+            {t.cookieDescription}
           </p>
 
           <p className="cookie-details">
-            Premium flour base with Belgian dark chocolate chips, Madagascar vanilla extract, 
-            and brown butter from grass-fed cows. Baked fresh this morning with extra love.
+            {t.cookieDetails}
           </p>
         </div>
       </section>
@@ -255,19 +282,19 @@ function App() {
       {/* Reviews Section */}
       <section className="reviews-section">
         <div className="reviews-header">
-          <h2 className="reviews-title">REVIEWS</h2>
+          <h2 className="reviews-title">{t.reviewsTitle}</h2>
           <div className="reviews-tabs">
             <button 
               className={`tab ${activeTab === 'reviews' ? 'active' : ''}`}
               onClick={() => setActiveTab('reviews')}
             >
-              Reviews
+              {t.reviewsTab}
             </button>
             <button 
               className={`tab ${activeTab === 'qa' ? 'active' : ''}`}
               onClick={() => setActiveTab('qa')}
             >
-              Q&A
+              {t.qaTab}
             </button>
           </div>
         </div>
@@ -277,16 +304,16 @@ function App() {
             {reviews.length === 0 ? (
               <div className="no-reviews">
                 <div className="no-reviews-icon">⭐</div>
-                <h3 className="no-reviews-title">We're looking for stars!</h3>
-                <p className="no-reviews-subtitle">Let us know what you think</p>
+                <h3 className="no-reviews-title">{t.noReviewsTitle}</h3>
+                <p className="no-reviews-subtitle">{t.noReviewsSubtitle}</p>
                 <button className="write-review-btn" onClick={openReviewModal}>
-                  BE THE FIRST TO WRITE A REVIEW!
+                  {t.firstReviewButton}
                 </button>
               </div>
             ) : (
               <div className="reviews-list">
                 <div className="reviews-count">
-                  {reviews.length} review{reviews.length === 1 ? '' : 's'}
+                  {reviews.length} {reviews.length === 1 ? t.reviewCount : t.reviewCountPlural}
                 </div>
                 
                 {reviews.map((review) => (
@@ -311,7 +338,7 @@ function App() {
                     
                     <div className="review-meta">
                       {review.name && (
-                        <span className="review-author">By {review.name}</span>
+                        <span className="review-author">{t.byAuthor} {review.name}</span>
                       )}
                       <span className="review-date">
                         {new Date(review.created_at).toLocaleDateString()}
@@ -333,17 +360,17 @@ function App() {
                     {loadingMore ? (
                       <>
                         <span className="load-more-spinner"></span>
-                        Loading...
+                        {t.loading}
                       </>
                     ) : (
-                      'Load More Reviews'
+                      t.loadMoreButton
                     )}
                   </button>
                 )}
                 
                 <div className="reviews-header-with-button">
                   <button className="write-review-btn" onClick={openReviewModal}>
-                    WRITE A REVIEW
+                    {t.writeReviewButton}
                   </button>
                 </div>
               </div>
@@ -357,13 +384,13 @@ function App() {
         <div className="modal-overlay" onClick={closeReviewModal}>
           <div className="modal" onClick={(e) => e.stopPropagation()}>
             <button className="modal-close" onClick={closeReviewModal}>×</button>
-            <h2 className="modal-title">Share your thoughts</h2>
+            <h2 className="modal-title">{t.modalTitle}</h2>
             
             <form className="modal-form" onSubmit={handleSubmitReview}>
               {/* Rating */}
               <div className="form-section">
                 <label className="form-label">
-                  Rate your experience <span className="required">*</span>
+                  {t.rateExperience} <span className="required">{t.required}</span>
                 </label>
                 <div className="rating-input">
                   {[1, 2, 3, 4, 5].map((star) => (
@@ -396,14 +423,14 @@ function App() {
               {/* Title */}
               <div className="form-section">
                 <label className="form-label">
-                  Write a title <span className="required">*</span>
+                  {t.writeTitle} <span className="required">{t.required}</span>
                 </label>
                 <input
                   type="text"
                   className="form-input"
                   value={headline}
                   onChange={(e) => setHeadline(e.target.value)}
-                  placeholder="Summarize your experience"
+                  placeholder={t.titlePlaceholder}
                   required
                 />
               </div>
@@ -411,13 +438,13 @@ function App() {
               {/* Review Text */}
               <div className="form-section">
                 <label className="form-label">
-                  Write a review <span className="required">*</span>
+                  {t.writeReview} <span className="required">{t.required}</span>
                 </label>
                 <textarea
                   className="form-textarea"
                   value={comment}
                   onChange={(e) => setComment(e.target.value)}
-                  placeholder="Tell us what you like or dislike"
+                  placeholder={t.reviewPlaceholder}
                   required
                 />
               </div>
@@ -425,7 +452,7 @@ function App() {
               {/* Name */}
               <div className="form-section">
                 <label className="form-label">
-                  Your name <span className="required">*</span>
+                  {t.yourName} <span className="required">{t.required}</span>
                 </label>
                 <input
                   type="text"
@@ -441,7 +468,7 @@ function App() {
                 className="submit-review-btn"
                 disabled={rating === 0 || !comment || !headline || !name || isSubmitting}
               >
-                {isSubmitting ? 'Submitting...' : 'Send'}
+                {isSubmitting ? t.submitting : t.sendButton}
               </button>
             </form>
           </div>
